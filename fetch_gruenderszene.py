@@ -44,13 +44,49 @@ def loadUrl(url):
             finDate = finItem.find("td","value").text
         i += 1
         
-    myStartup.addFinance(finType, finValue, finDate)    
+    myStartup.addFinance(finType, finValue, finDate)
+
+    #add investor data
+    investorList = soup.find(id="investor-view").ul.findAll("li")
+
+    i=0
+    for invItem in investorList:
+        if i==0: #Managers
+            j = 0
+            invListMan = invItem.findAll("p")
+            for invItemMan in invListMan:
+                if j != 0:
+                    invType = "Manager"
+                    invName = re.sub('\(([]\<]?\d{1,3})\%\)','', invItemMan.text)
+
+                    rgQuery = re.compile('\(([]\<]?\d{1,3})\%\)') #Search for String: (100%) or (<1%)
+                    rgResult = re.search(rgQuery, invItemMan.text)
+                    invShare = rgResult.group(1)
+                    myStartup.addInvestor(invName, invType, invShare)
+                j += 1
+        elif i==1: #Supporters
+            j = 0
+            invListSup = invItem.findAll("p")
+            for invItemSup in invListSup:
+                if j != 0:
+                    invType = "Investor and Supporter"
+                    invName = re.sub('\(([]\<]?\d{1,3})\%\)','', invItemSup.text)
+
+                    rgQuery = re.compile('\(([]\<]?\d{1,3})\%\)') #Search for String: (100%) or (<1%)
+                    rgResult = re.search(rgQuery, invItemSup.text)
+                    invShare = rgResult.group(1)
+                    myStartup.addInvestor(invName, invType, invShare)
+                j += 1
+        i +=1
 
     #output data
     return json.dumps(myStartup.getStartupData(), sort_keys = True, ensure_ascii=False)
 
 
-output = loadUrl('http://www.gruenderszene.de/datenbank/unternehmen/a-space-for-art');
+output = loadUrl('http://www.gruenderszene.de/datenbank/unternehmen/ohsaft');
 
 with io.open('output.json', 'w', encoding='utf-8') as f:
   f.write(unicode(output))
+  f.close()
+if f.closed == True:
+    print (output)
