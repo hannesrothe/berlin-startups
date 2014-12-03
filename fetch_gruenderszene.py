@@ -1,6 +1,7 @@
 import urllib2
 import json
 import re
+import io
 from bs4 import BeautifulSoup
 from startup_class import Startup
 
@@ -46,7 +47,10 @@ def loadUrl(url):
     myStartup.addFinance(finType, finValue, finDate)    
 
     #output data
-    return json.dumps(myStartup.getStartupData(), sort_keys = True)
+    return json.dumps(myStartup.getStartupData(), sort_keys = True, ensure_ascii=False)
 
 
-print loadUrl('http://www.gruenderszene.de/datenbank/unternehmen/a-space-for-art');
+output = loadUrl('http://www.gruenderszene.de/datenbank/unternehmen/a-space-for-art');
+
+with io.open('output.json', 'w', encoding='utf-8') as f:
+  f.write(unicode(output))
