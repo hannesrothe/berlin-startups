@@ -4,6 +4,8 @@ class Startup(object):
 	teaser =""
 	founding_year = 0
 	founder = []
+	finance = []
+	shares = []
 
 	def __init__(self, name, description, founding_year):
 		self.name = name
@@ -20,12 +22,21 @@ class Startup(object):
 			"url": url
 			})
 
+	def addFinance (self, finType, finValue, date):
+		self.finance.append({
+			"Type": finType,
+			"Company Value": finValue,
+			"Data collected on": date
+			})
+
 	def getStartupData(self):
 		startupData = [{
 			"name": self.name,
 			"teaser": self.teaser,
 			"description": self.description,
 			"Founding year": self.founding_year,
-			"Founder": self.founder
+			"Founder": self.founder,
+			"Finance": self.finance,
+			"Shares": self.shares
 		}]
 		return startupData
