@@ -7,11 +7,21 @@ response = urllib2.urlopen('http://www.gruenderszene.de/datenbank/unternehmen/a-
 soup = BeautifulSoup(response)
 
 #print my_table
-name = soup.find("h1", "profile-name").text
-teaser = soup.find("p", "teaser").text
-description = soup.find("p", "teaser").findNextSibling("p").text
+startupName = soup.find("div", "profile-additional-information").ul.li.text
+foundedIn = soup.find("div", "profile-additional-information").ul.li.findNextSibling("li").span.text
+startupTeaser = soup.find("p", "teaser").text
+startupDescription = soup.find("p", "teaser").findNextSibling("p").text
+founderList = soup.findAll("div", "head-information")
 
-mystartup = Startup(name, description, 2008)
-mystartup.addTeaser(teaser)
+for founder in founderList:
+    founderName = founder.text
+    print founderName
+
+
+
+mystartup = Startup(startupName, startupDescription, foundedIn)
+mystartup.addTeaser(startupTeaser)
+
+
        
 print json.dumps(mystartup.getStartupData(), sort_keys = True)

@@ -13,6 +13,13 @@ class Startup(object):
 	def addTeaser (self, teaser):
 		self.teaser = teaser
 
+	def addFounder (self, name, position, url):
+		self.founder.append({
+			"name": name,
+			"position": position,
+			"url": url
+			})
+
 	def getStartupData(self):
 		startupData = [{
 			"name": self.name,
