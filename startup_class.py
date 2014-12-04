@@ -1,3 +1,5 @@
+import re
+
 class Startup(object):
 	name = ""
 	urlList = []
@@ -53,6 +55,7 @@ class Startup(object):
 		self.email = email
 
 	def addUrl(self, name, url):
+		url = re.sub(',', '', url, re.UNICODE)
 		self.urlList.append({
 				"Website": name,
 				"Url": url

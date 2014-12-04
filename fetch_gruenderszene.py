@@ -108,7 +108,7 @@ def loadUrl(url):
                         invShare = rgResult.group(1)
                         myStartup.addInvestor(invName, invType, invShare)
                     j += 1
-            elif i==1: #Supporters
+            elif i>0: #Supporters
                 j = 0
                 invListSup = invItem.findAll("p")
                 for invItemSup in invListSup:
