@@ -1,17 +1,20 @@
 class Startup(object):
 	name = ""
-	description = ""
-	teaser =""
-	founding_year = 0
-	founder = []
-	finance = []
-	investors = []
-	address = ""
-	phone = ""
-	email = ""
 	urlList = []
 
 	def __init__(self, name, description, founding_year):
+		self.name = ""
+		self.description = ""
+		self.teaser =""
+		self.founding_year = 0
+		self.founder = []
+		self.finance = []
+		self.investors = []
+		self.address = ""
+		self.phone = ""
+		self.email = ""
+		self.urlList = []
+
 		self.name = name
 		self.description = description
 		self.founding_year = founding_year
@@ -56,16 +59,17 @@ class Startup(object):
 			})
 
 	def getStartupData(self):
-		startupData = [{
+		startupData = {
 			"Name": self.name,
 			"Teaser": self.teaser,
 			"Description": self.description,
 			"Address": self.address,
 			"E-Mail": self.email,
+			"Phone": self.phone,
 			"Founding year": self.founding_year,
 			"Web": self.urlList,
 			"Founder": self.founder,
 			"Finance": self.finance,
 			"Investors": self.investors
-		}]
+		}
 		return startupData
