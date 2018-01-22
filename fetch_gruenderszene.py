@@ -17,7 +17,7 @@ def loadUrl(url):
     #load url, clear scraped data from <br>
     response = urlopen(url)
     newResponse = re.sub('<br />', ' ', response.read().decode('utf-8'), re.UNICODE)
-    soup = BeautifulSoup(newResponse, "lxml")
+    soup = BeautifulSoup(newResponse)
 
     #fetch initial startup data
     startupName = soup.find("div", "profile-additional-information").ul.li.text
@@ -144,7 +144,7 @@ def loadUrlList(url):
     #load url, clear scraped data from <br>
     response = urlopen(url)
     newResponse = re.sub('<br />', ' ', response.read().decode('utf-8'))
-    soup = BeautifulSoup(newResponse, "lxml")
+    soup = BeautifulSoup(newResponse)
 
     #fetch initial startup data
     startupList = soup.find("ul", "single-letter-list").findAll("li")
