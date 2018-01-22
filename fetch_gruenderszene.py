@@ -1,4 +1,11 @@
-import urllib2
+"""
+@author: Hannes Rothe
+@description: Scrape Gruenderszene.de Database
+@date: 2018-01-22
+"""
+
+from urllib.request import urlopen
+from urllib.parse import urlparse
 import json
 import re
 import io
@@ -8,9 +15,9 @@ from startup_class import Startup
 
 def loadUrl(url):
     #load url, clear scraped data from <br>
-    response = urllib2.urlopen(url)
-    newResponse = re.sub('<br />', ' ', response.read(), re.UNICODE)
-    soup = BeautifulSoup(newResponse)
+    response = urlopen(url)
+    newResponse = re.sub('<br />', ' ', response.read().decode('utf-8'), re.UNICODE)
+    soup = BeautifulSoup(newResponse, "lxml")
 
     #fetch initial startup data
     startupName = soup.find("div", "profile-additional-information").ul.li.text
@@ -135,9 +142,9 @@ def loadUrlList(url):
     urlListOutput = []
 
     #load url, clear scraped data from <br>
-    response = urllib2.urlopen(url)
-    newResponse = re.sub('<br />', ' ', response.read())
-    soup = BeautifulSoup(newResponse)
+    response = urlopen(url)
+    newResponse = re.sub('<br />', ' ', response.read().decode('utf-8'))
+    soup = BeautifulSoup(newResponse, "lxml")
 
     #fetch initial startup data
     startupList = soup.find("ul", "single-letter-list").findAll("li")
@@ -151,26 +158,25 @@ def loadUrlList(url):
 
 
 def loadDatabase(baseUrl, outputFile):
-    with io.open(outputFile, 'a', encoding='utf-8') as f:
-        f.write(unicode("{\"Startups\":["))
+    with io.open(outputFile, 'w', encoding='utf-8') as f:
+        f.write(str("{\"Startups\":["))
         i = 0
         #z = len(string.lowercase)
 
-        for i in range(6,len(string.lowercase)):
-            startupList = loadUrlList(baseUrl + string.lowercase[i]) #add letter [a-z] to url, according to its position in alphabet
+        for i in range(0,len(string.ascii_lowercase)):
+            startupList = loadUrlList(baseUrl + string.ascii_lowercase[i]) #add letter [a-z] to url, according to its position in alphabet
             j = 1
 
             for startupItem in startupList:
-                print startupItem
-                f.write(unicode(loadUrl(startupItem)))
+                print(startupItem)
+                f.write(str(loadUrl("http://" + urlparse(baseUrl).netloc + startupItem)))
                 if j < len(startupList):
-                    f.write(unicode(",\n"))
+                    f.write(str(",\n"))
 
                 j += 1
 
-        f.write(unicode("], \"DataSource\":\""+baseUrl+"\"}"))
+        f.write(str("], \"DataSource\":\""+baseUrl+"\"}"))
 
     return "finished"
 
-
-print loadDatabase('http://www.gruenderszene.de/datenbank/unternehmen/found/', "output.json")
+print(loadDatabase('http://www.gruenderszene.de/datenbank/unternehmen/found/', "output.json"))
